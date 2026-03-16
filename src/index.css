@@ -1,0 +1,24 @@
+:root {
+  --fc-bg: #0c1220;              
+  --fc-surface: #111829;         
+  --fc-sidebar: #0a1326;         
+  --fc-header: #141d33;          
+  --fc-border: #23314d;          
+  --fc-accent: #2d6cdf;          
+  --fc-accent-soft: #3b7bff;
+  --fc-text: #e4e8f0;            
+  --fc-text-muted: #8f9bb2;     
+}
+
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  background: var(--fc-bg); 
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+body, html, * {
+  font-family: "Inter", sans-serif;
+}

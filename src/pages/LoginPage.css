@@ -1,0 +1,129 @@
+.login-root {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at top, #1a365d 0, var(--fc-bg) 60%);
+  color: var(--fc-text);
+}
+
+.login-card {
+  width: 360px;
+  padding: 24px 28px 28px;
+  border-radius: 16px;
+  background: rgba(5, 8, 22, 0.96);
+  border: 1px solid var(--fc-border);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
+}
+
+.login-card h1 {
+  font-size: 20px;
+  margin-bottom: 4px;
+}
+
+.login-card p {
+  font-size: 13px;
+  color: var(--fc-text-muted);
+  margin-bottom: 16px;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.login-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+}
+
+.login-form input {
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--fc-border);
+  background: #050816;
+  color: var(--fc-text);
+  outline: none;
+}
+
+.password-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-field input {
+  width: 100%;
+  padding-right: 42px;
+}
+
+.toggle-eye {
+  position: absolute;
+  right: 10px;
+  background: transparent;
+  border: none;
+  color: var(--fc-text);
+  cursor: pointer;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.2s;
+  padding: 4px;
+}
+
+.toggle-eye:hover {
+  color: var(--fc-accent);
+}
+
+.login-form select {
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--fc-border);
+  background: #050816;
+  color: var(--fc-text);
+  outline: none;
+  appearance: none;
+}
+
+.login-form input:focus,
+.login-form select:focus {
+  border-color: var(--fc-accent);
+}
+
+.login-form .submit-btn {
+  margin-top: 12px;
+  padding: 12px 18px;
+  border-radius: 10px;
+  border: none;
+
+  background: linear-gradient(135deg, #2d6cdf, #3b82f6);
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+
+  cursor: pointer;
+  transition: 0.25s;
+
+  box-shadow: 0 4px 12px rgba(45, 108, 223, 0.35);
+}
+
+.login-form .submit-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(45, 108, 223, 0.45);
+  background: linear-gradient(135deg, #3b82f6, #2d6cdf);
+}
+
+.login-form .submit-btn:active {
+  transform: scale(0.97);
+}
+
+.login-hint {
+  display: block;
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--fc-text-muted);
+}

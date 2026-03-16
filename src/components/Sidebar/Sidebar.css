@@ -1,0 +1,145 @@
+.rs-root {
+  padding: 10px;
+}
+
+.rs-search {
+  position: relative;
+  margin-bottom: 16px;
+}
+
+.rs-search input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.2);
+  color: var(--fc-text);
+  font-size: 14px;
+}
+
+.rs-search-results {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% + 6px);
+  max-height: 260px;
+  overflow-y: auto;
+  background: rgba(20, 23, 28, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  z-index: 10;
+}
+
+.rs-search-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px;
+  border-radius: 8px;
+  text-decoration: none;
+  background: rgba(255, 255, 255, 0);
+  transition: background 0.15s;
+}
+
+.rs-search-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.rs-search-name {
+  color: var(--fc-text);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.rs-search-meta {
+  color: var(--fc-text-muted);
+  font-size: 12px;
+}
+
+.rs-title {
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--fc-text-muted);
+  margin-bottom: 14px;
+}
+
+.rs-list {
+  display: flex;
+  flex-direction: column;
+  padding-right: 12px;
+  gap: 8px;
+}
+
+.rs-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  padding-left: 22px;
+  border-radius: 8px;
+  font-size: 15px;
+  color: var(--fc-text-muted);
+  text-decoration: none;
+  transition: 0.15s ease;
+}
+
+.rs-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--fc-text);
+}
+
+.rs-item-active {
+  background: var(--fc-accent);
+  color: #fff;
+}
+
+.rs-dot {
+  width: 7px;
+  height: 7px;
+  margin-left: 0;
+  flex-shrink: 0;
+  background: var(--fc-accent-soft);
+  border-radius: 50%;
+}
+
+.admin-btn {
+  margin-top: 28px;
+  padding: 12px 16px;
+  border-radius: 10px;
+
+  background: rgba(255, 255, 255, 0.08); 
+  color: var(--fc-text);
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+  text-align: center;
+  display: block;
+
+  transition: 0.25s;
+}
+
+.admin-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.admin-btn-active {
+  background: linear-gradient(135deg, #2d6cdf, #3b82f6) !important;
+  color: white !important;
+  box-shadow: 0 4px 12px rgba(45, 108, 223, 0.45);
+}
+
+.rs-status {
+  font-size: 13px;
+  color: var(--fc-text-muted);
+  margin-bottom: 8px;
+}
+
+.rs-error {
+  color: #ff7c7c;
+}
