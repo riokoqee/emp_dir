@@ -55,4 +55,27 @@ router.get("/search", async (req, res) => {
   }
 });
 
+router.get("/", async (req, res) => {
+  try {
+    const result = await db.query(
+      `
+      SELECT 
+        e.id,
+        e.name,
+        e.position,
+        e.room,
+        e.department_id,
+        d.name AS department
+      FROM employees e
+      LEFT JOIN departments d ON d.id = e.department_id
+      `
+    );
+
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;

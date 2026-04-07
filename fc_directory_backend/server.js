@@ -13,6 +13,7 @@ app.use("/api/employees", employeesRoute);
 app.use("/api/departments", departmentsRoute);
 app.use("/api/admin/departments", adminDepartmentsRoute);
 app.use("/api/admin/employees", require("./routes/adminEmployees"));
+app.use("/api/employees", require("./routes/employees"));
 
 const PORT = 8080;
 app.listen(PORT, () => console.log("Server running on port " + PORT));

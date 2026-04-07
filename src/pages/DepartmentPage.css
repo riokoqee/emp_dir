@@ -8,29 +8,141 @@
   margin-bottom: 20px;
 }
 
+/* ==================== ФИЛЬТРЫ ==================== */
 .filters {
   display: flex;
   gap: 12px;
   margin-bottom: 20px;
+  flex-wrap: wrap;
+  align-items: stretch; /* Исправление: растягиваем инпут и селект на одну высоту */
+  background: #0b1225;
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid var(--fc-border);
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.filters::-webkit-scrollbar {
+  height: 6px;
+}
+
+.filters::-webkit-scrollbar-thumb {
+  background: #243056;
+  border-radius: 10px;
+}
+
+.filters > * {
+  animation: fadeSlide 0.25s ease;
+}
+
+@keyframes fadeSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.search-wrapper {
+  position: relative;
+  flex: 1;
+  min-width: 0; /* Исправление: позволяет flex-элементу сжиматься, чтобы не выталкивать селект */
 }
 
 .filter-input {
-  flex: 1;
-  padding: 10px 14px;
+  width: 100%;
+  box-sizing: border-box; /* Исправление: внутренние отступы не ломают ширину 100% */
+  height: 100%; /* Занимает всю высоту контейнера */
+  padding: 12px 16px;
+  font-size: 16px;
   border-radius: 8px;
   border: 1px solid var(--fc-border);
   background: #0f1730;
   color: var(--fc-text);
+  transition: all 0.2s ease;
+}
+
+.filter-input:hover {
+  border-color: #3b82f6;
+}
+
+.filter-input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+  outline: none;
 }
 
 .filter-select {
-  padding: 10px 12px;
+  appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg fill='%23aaa' height='20' viewBox='0 0 20 20' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M5.5 7.5l4.5 5 4.5-5'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 16px;
+  padding: 12px 36px 12px 16px; /* Исправление: увеличен отступ справа под стрелочку */
+  font-size: 16px;
   border-radius: 8px;
   border: 1px solid var(--fc-border);
-  background: #0f1730;
+  background-color: #0f1730;
   color: var(--fc-text);
+  min-width: 180px;
+  flex-shrink: 0; /* Исправление: запрещаем селекту сжиматься */
+  white-space: nowrap; /* Исправление: текст не переносится на новую строку */
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
+.filter-select:hover {
+  border-color: #3b82f6;
+}
+
+.filter-select:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+  transform: scale(1.02);
+  outline: none;
+}
+
+/* Активный фильтр (когда выбран/введен) */
+.filter-select:not([value=""]),
+.filter-input:not(:placeholder-shown) {
+  border-color: #3b82f6;
+  background-color: #121b38;
+}
+
+/* Подсказка транслитерации */
+.translit-hint {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 6px;
+  padding: 10px 14px;
+  background: #1a2542;
+  border: 1px solid var(--fc-border);
+  border-radius: 8px;
+  font-size: 14px;
+  color: var(--fc-text-muted);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+  z-index: 20;
+  white-space: nowrap;
+  pointer-events: none;
+  animation: fadeInHint 0.2s ease;
+}
+
+.translit-hint strong {
+  color: #60a5fa;
+  font-weight: 600;
+}
+
+@keyframes fadeInHint {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ==================== ТАБЛИЦА ==================== */
 .dept-table {
   width: 100%;
   border-collapse: collapse;
@@ -72,6 +184,39 @@
   font-size: 13px;
 }
 
+/* ==================== РАСКРЫВАЮЩИЕСЯ СТРОКИ ==================== */
+.emp-row {
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.emp-row:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.emp-details .details-box {
+  padding: 14px;
+  border-left: 4px solid #3b82f6;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 8px;
+  margin: 6px 0;
+  color: var(--fc-text);
+}
+
+.emp-details .details-box p {
+  margin: 8px 0;
+}
+
+.emp-details {
+  animation: fadeIn 0.25s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ==================== АККОРДЕОН (если используется) ==================== */
 .accordion-list {
   display: flex;
   flex-direction: column;
@@ -115,60 +260,217 @@
   color: var(--fc-text-muted);
   font-size: 14px;
   border-top: 1px solid var(--fc-border);
-  animation: fadeIn 0.2s ease-in;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-4px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.select-row {
+/* ==================== ДОП. СТИЛИ ФИЛЬТРОВ ==================== */
+.filter-reset {
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--fc-border);
+  background: #1a2542;
+  color: var(--fc-text);
+  font-size: 14px;
   cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 120px;
 }
 
-.arrow-cell {
-  width: 40px;
-  text-align: center;
+.filter-reset:hover {
+  background: #243056;
+  border-color: #3b82f6;
 }
 
-.arrow {
-  display: inline-block;
-  transition: transform 0.25s ease;
-  opacity: 0.6;
+.filter-reset:active {
+  transform: scale(0.96);
 }
 
-.arrow.open {
-  transform: rotate(180deg);
-  opacity: 1;
-}
-
-/* нижний блок */
-.expand-row td {
-  background: rgba(255, 255, 255, 0.04);
-  border-bottom: 1px solid #1a2542;
-}
-
-.expand-box {
-  padding: 12px 14px;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 8px 16px;
-}
-
-.emp-row {
+.filter-chip {
+  padding: 8px 14px;
+  border-radius: 20px;
+  background: #1a2542;
+  border: 1px solid var(--fc-border);
   cursor: pointer;
-  transition: background 0.2s;
+  font-size: 14px;
+  transition: all 0.2s;
 }
 
-.emp-row:hover {
-  background: rgba(255,255,255,0.05);
+.filter-chip:hover {
+  background: #243056;
 }
 
-.emp-details .details-box {
-  padding: 12px;
-  border-left: 3px solid #3b82f6;
-  background: rgba(255,255,255,0.04);
-  border-radius: 6px;
+.filter-chip.active {
+  background: #3b82f6;
+  color: white;
+  border-color: #3b82f6;
+}
+
+/* ==================== АДАПТИВ ==================== */
+@media (max-width: 768px) {
+  .filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .search-wrapper {
+    min-width: 100%;
+  }
+  
+  .filter-input,
+  .filter-select {
+    font-size: 15px;
+    width: 100%; /* На мобильных элементах занимают всю ширину */
+  }
+}
+
+/* ==================== КНОПКА ФИЛЬТРОВ ==================== */
+.filter-button {
+  padding: 12px 20px;
+  font-size: 16px;
+  background: #0f1730;
+  color: var(--fc-text);
+  border: 1px solid var(--fc-border);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.filter-button:hover {
+  border-color: #3b82f6;
+  background: #121b38;
+}
+
+.filter-button:active {
+  transform: scale(0.98);
+}
+
+.filter-count {
+  background: #3b82f6;
+  color: white;
+  font-size: 13px;
+  padding: 2px 7px;
+  border-radius: 9999px;
+  font-weight: 600;
+}
+
+/* ==================== ПАНЕЛЬ ФИЛЬТРОВ ==================== */
+.filter-panel {
+  margin-top: 12px;
+  padding: 20px;
+  background: #0f1730;
+  border: 1px solid var(--fc-border);
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+  max-width: 480px;
+  animation: fadeSlide 0.25s ease;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--fc-border);
+}
+
+.panel-header h3 {
+  margin: 0;
+  color: var(--fc-text);
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.reset-all-btn {
+  padding: 8px 16px;
+  background: #1a2542;
+  color: var(--fc-text);
+  border: 1px solid var(--fc-border);
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.reset-all-btn:hover {
+  background: #243056;
+  border-color: #3b82f6;
+}
+
+/* Группы фильтров */
+.filter-group {
+  margin-bottom: 22px;
+}
+
+.filter-group-title {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--fc-text-muted);
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.checkbox-list {
+  max-height: 200px;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+  cursor: pointer;
+  font-size: 15px;
+  color: var(--fc-text);
+}
+
+.checkbox-label:hover {
+  color: #60a5fa;
+}
+
+/* Инпут для должности */
+.filter-panel .filter-input {
+  width: 100%;
   margin-top: 4px;
+}
+
+/* Футер панели */
+.panel-footer {
+  margin-top: 20px;
+  padding-top: 12px;
+  border-top: 1px solid var(--fc-border);
+  text-align: right;
+}
+
+.close-panel-btn {
+  padding: 10px 24px;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.close-panel-btn:hover {
+  background: #2563eb;
+  transform: translateY(-1px);
+}
+
+/* Скроллбар в чекбоксах */
+.checkbox-list::-webkit-scrollbar {
+  width: 6px;
+}
+.checkbox-list::-webkit-scrollbar-thumb {
+  background: #243056;
+  border-radius: 10px;
 }

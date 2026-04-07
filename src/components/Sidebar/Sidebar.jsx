@@ -2,18 +2,68 @@ import "./Sidebar.css";
 import { NavLink } from "react-router-dom";
 import { useEffect, useState, useCallback } from "react";
 import { getDepartments } from "../../api/departmentsApi";
-import { searchEmployees } from "../../api/employeesApi";
+import { getAllEmployees } from "../../api/employeesApi";
 
 const RightSidebar = () => {
   const [departments, setDepartments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  const [allEmployees, setAllEmployees] = useState([]);
+
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
   const [searching, setSearching] = useState(false);
-  const [searchError, setSearchError] = useState("");
 
+  // ==================== ТРАНСЛИТ ====================
+  const keyboardToCyr = (str) => {
+    if (!str) return "";
+    const map = {
+      q: "й", w: "ц", e: "у", r: "к", t: "е", y: "н", u: "г", i: "ш", o: "щ",
+      p: "з", "[": "х", "]": "ъ", a: "ф", s: "ы", d: "в", f: "а", g: "п", h: "р",
+      j: "о", k: "л", l: "д", ";": "ж", "'": "э", z: "я", x: "ч", c: "с", v: "м",
+      b: "и", n: "т", m: "ь", ",": "б", ".": "ю", "`": "ё",
+      Q: "Й", W: "Ц", E: "У", R: "К", T: "Е", Y: "Н", U: "Г", I: "Ш", O: "Щ",
+      P: "З", "{": "Х", "}": "Ъ", A: "Ф", S: "Ы", D: "В", F: "А", G: "П", H: "Р",
+      J: "О", K: "Л", L: "Д", ":": "Ж", '"': "Э", Z: "Я", X: "Ч", C: "С", V: "М",
+      B: "И", N: "Т", M: "Ь", "<": "Б", ">": "Ю", "~": "Ё",
+    };
+    return str.split("").map((char) => map[char] || char).join("");
+  };
+
+  const latinToCyr = (str) => {
+    if (!str) return "";
+    const map = {
+      a: "а", b: "б", c: "ц", d: "д", e: "е", f: "ф", g: "г", h: "х", i: "и",
+      j: "й", k: "к", l: "л", m: "м", n: "н", o: "о", p: "п", q: "к", r: "р",
+      s: "с", t: "т", u: "у", v: "в", w: "ш", x: "х", y: "ы", z: "з",
+      sh: "ш", ch: "ч", zh: "ж", kh: "х",
+    };
+
+    let result = "";
+    let i = 0;
+
+    while (i < str.length) {
+      const two = str.slice(i, i + 2).toLowerCase();
+      if (map[two]) {
+        result += map[two];
+        i += 2;
+        continue;
+      }
+      const one = str[i].toLowerCase();
+      result += map[one] || str[i];
+      i++;
+    }
+
+    return result;
+  };
+
+  const hasCyrillic = (str) => {
+    if (!str) return false;
+    return /[а-яёәғқңөұүіА-ЯЁӘҒҚҢӨҰҮІ]/.test(str);
+  };
+
+  // ==================== ЗАГРУЗКА ====================
   useEffect(() => {
     (async () => {
       try {
@@ -29,35 +79,52 @@ const RightSidebar = () => {
   }, []);
 
   useEffect(() => {
+    (async () => {
+      try {
+        const data = await getAllEmployees();
+        setAllEmployees(data);
+      } catch (e) {
+        console.error(e);
+      }
+    })();
+  }, []);
+
+  // ==================== ПОИСК ====================
+  useEffect(() => {
     if (!query || query.trim().length < 2) {
       setResults([]);
       setSearching(false);
-      setSearchError("");
       return;
     }
 
     setSearching(true);
-    setSearchError("");
 
-    const timeout = setTimeout(async () => {
-      try {
-        const data = await searchEmployees(query.trim());
-        setResults(data);
-      } catch (err) {
-        console.error(err);
-        setSearchError("Ошибка поиска");
-      } finally {
-        setSearching(false);
+    const timeout = setTimeout(() => {
+      const q = query.trim();
+      const isCyr = hasCyrillic(q);
+
+      const variants = [q.toLowerCase()];
+
+      if (!isCyr) {
+        variants.push(keyboardToCyr(q).toLowerCase());
+        variants.push(latinToCyr(q).toLowerCase());
       }
-    }, 300);
+
+      const filtered = allEmployees.filter((emp) => {
+        const nameLower = emp.name.toLowerCase();
+        return variants.some((v) => nameLower.includes(v));
+      });
+
+      setResults(filtered);
+      setSearching(false);
+    }, 200);
 
     return () => clearTimeout(timeout);
-  }, [query]);
+  }, [query, allEmployees]);
 
   const handleSelectResult = useCallback(() => {
     setResults([]);
     setQuery("");
-    setSearchError("");
     setSearching(false);
   }, []);
 
@@ -66,17 +133,25 @@ const RightSidebar = () => {
       <div className="rs-search">
         <input
           type="text"
-          placeholder="Поиск сотрудника..."
+          placeholder="Поиск сотрудника... (можно с англ. раскладкой)"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         />
+
+        {/* Подсказка */}
+        {query.length > 2 && !hasCyrillic(query) && (
+          <div className="rs-translit-hint">
+            Распознано как: <strong>{keyboardToCyr(query)}</strong>
+          </div>
+        )}
+
         {query.trim().length >= 2 && (
           <div className="rs-search-results">
             {searching && <p className="rs-status">Поиск...</p>}
-            {searchError && <p className="rs-status rs-error">{searchError}</p>}
-            {!searching && !searchError && results.length === 0 && (
+            {!searching && results.length === 0 && (
               <p className="rs-status">Не найдено</p>
             )}
+
             {results.map((emp) => (
               <NavLink
                 key={emp.id}
