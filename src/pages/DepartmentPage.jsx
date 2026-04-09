@@ -282,7 +282,7 @@ export default function DepartmentPage() {
             <tr>
               <th onClick={() => toggleSort("name")}>ФИО</th>
               <th onClick={() => toggleSort("position")}>Должность</th>
-              <th onClick={() => toggleSort("phone_city")}>Городской</th>
+              <th onClick={() => toggleSort("internal_phone")}>Внутренний</th>
             </tr>
           </thead>
           <tbody>
@@ -296,13 +296,14 @@ export default function DepartmentPage() {
                 >
                   <td>{emp.name}</td>
                   <td>{emp.position}</td>
-                  <td>{emp.phone_city || "—"}</td>
+                  <td>{emp.internal_phone || "—"}</td>
                 </tr>
 
                 {openId === emp.id && (
                   <tr className="emp-details">
                     <td colSpan="3">
                       <div className="details-box">
+                        <p><strong>Внутренний:</strong> {emp.internal_phone || "—"}</p>
                         <p><strong>Городской:</strong> {emp.phone_city || "—"}</p>
                         <p><strong>Сотовый:</strong> {emp.phone_mobile || "—"}</p>
                         <p><strong>Email:</strong> {emp.email || "—"}</p>

@@ -25,6 +25,11 @@
   gap: 2px;
 }
 
+.fc-logo {
+  height: 56px;        /* или 42px / 55px — подбери под себя */
+  width: auto;
+}
+
 .logo-main {
   font-weight: 600;
   letter-spacing: 0.08em;

@@ -15,7 +15,7 @@ const MainLayout = ({ children }) => {
     <div className="layout-root">
       <header className="layout-header">
         <Link to="/" className="layout-logo">
-          <img src="/src/assets/fc_logo.svg" className="fc-logo" alt="Финцентр" />
+          <img src="/src/assets/fc_new_logo.svg" className="fc-logo" alt="Финцентр" />
         </Link>
         <div className="layout-user">
             {user ? (

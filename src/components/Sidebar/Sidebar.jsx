@@ -15,6 +15,22 @@ const RightSidebar = () => {
   const [results, setResults] = useState([]);
   const [searching, setSearching] = useState(false);
 
+  // ==================== НАСТРОЙКИ ГРУППИРОВКИ ====================
+  const [servicesExpanded, setServicesExpanded] = useState(false);
+
+  const PARENT_NAME = "Службы и прочие сотрудники";
+  const CHILD_NAMES = [
+    "Служба внутреннего аудита",
+    "Комплаенс-офицер",
+    "Корпоративный секретарь",
+    "Советник",
+    "Менеджер по ИБ",
+    "Риск менеджер",
+  ];
+
+  // ==================== СПЕЦИАЛЬНЫЙ ПОРЯДОК ДЛЯ ВЕРХНИХ ДЕПАРТАМЕНТОВ ====================
+  const SPECIAL_ORDER = ["Правление", "Аппарат председателя Правления"];
+
   // ==================== ТРАНСЛИТ ====================
   const keyboardToCyr = (str) => {
     if (!str) return "";
@@ -128,6 +144,26 @@ const RightSidebar = () => {
     setSearching(false);
   }, []);
 
+  // ==================== ПОДГОТОВКА СПИСКОВ ====================
+  const parentDept = departments.find((d) => d.name === PARENT_NAME);
+  const childDepts = departments.filter((d) => CHILD_NAMES.includes(d.name));
+
+  // Все обычные департаменты (без группы «Службы и прочие сотрудники»)
+  let normalDepts = departments.filter(
+    (d) => d.name !== PARENT_NAME && !CHILD_NAMES.includes(d.name)
+  );
+
+  // Специальный порядок: Правление → Аппарат председателя Правления → остальные по алфавиту
+  const specialDepts = SPECIAL_ORDER
+    .map((name) => normalDepts.find((d) => d.name === name))
+    .filter(Boolean);
+
+  const remainingDepts = normalDepts
+    .filter((d) => !SPECIAL_ORDER.includes(d.name))
+    .sort((a, b) => a.name.localeCompare(b.name, "ru"));
+
+  const orderedNormalDepts = [...specialDepts, ...remainingDepts];
+
   return (
     <div className="rs-root">
       <div className="rs-search">
@@ -138,7 +174,6 @@ const RightSidebar = () => {
           onChange={(e) => setQuery(e.target.value)}
         />
 
-        {/* Подсказка */}
         {query.length > 2 && !hasCyrillic(query) && (
           <div className="rs-translit-hint">
             Распознано как: <strong>{keyboardToCyr(query)}</strong>
@@ -178,7 +213,8 @@ const RightSidebar = () => {
       {error && !loading && <p className="rs-status rs-error">{error}</p>}
 
       <div className="rs-list">
-        {departments.map((d) => (
+        {/* Упорядоченные обычные департаменты */}
+        {orderedNormalDepts.map((d) => (
           <NavLink
             key={d.id}
             to={`/department/${d.id}`}
@@ -190,6 +226,36 @@ const RightSidebar = () => {
             <span className="rs-name">{d.name}</span>
           </NavLink>
         ))}
+
+        {/* === ГРУППА «Службы и прочие сотрудники» (в самом конце) === */}
+        {parentDept && (
+          <div className="rs-group">
+            <div
+              className="rs-group-header"
+              onClick={() => setServicesExpanded(!servicesExpanded)}
+            >
+              <span className="rs-dot" />
+              <span className="rs-name">{parentDept.name}</span>
+              <span className="rs-chevron">
+                {servicesExpanded ? "▼" : "▶"}
+              </span>
+            </div>
+
+            {servicesExpanded &&
+              childDepts.map((child) => (
+                <NavLink
+                  key={child.id}
+                  to={`/department/${child.id}`}
+                  className={({ isActive }) =>
+                    "rs-item rs-subitem" + (isActive ? " rs-item-active" : "")
+                  }
+                >
+                  <span className="rs-dot" />
+                  <span className="rs-name">{child.name}</span>
+                </NavLink>
+              ))}
+          </div>
+        )}
       </div>
     </div>
   );

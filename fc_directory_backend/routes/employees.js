@@ -13,6 +13,7 @@ router.get("/by-dept/:id", async (req, res) => {
         e.id,
         e.name,
         e.position,
+        e.internal_phone, -- <-- Добавили внутренний номер
         e.phone_city,
         e.phone_mobile,
         e.email,
@@ -39,7 +40,14 @@ router.get("/search", async (req, res) => {
     if (!q) return res.json([]);
 
     const result = await db.query(
-      `SELECT e.id, e.name, e.position, e.room, e.department_id, d.name AS department
+      `SELECT 
+        e.id, 
+        e.name, 
+        e.position, 
+        e.internal_phone, -- <-- Добавили внутренний номер
+        e.room, 
+        e.department_id, 
+        d.name AS department
        FROM employees e
        LEFT JOIN departments d ON d.id = e.department_id
        WHERE LOWER(e.name) LIKE LOWER($1)
@@ -63,6 +71,7 @@ router.get("/", async (req, res) => {
         e.id,
         e.name,
         e.position,
+        e.internal_phone, -- <-- Добавили внутренний номер
         e.room,
         e.department_id,
         d.name AS department

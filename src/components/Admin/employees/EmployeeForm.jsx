@@ -25,6 +25,14 @@ export default function EmployeeForm({ initial, onSave, lockedDepartmentId }) {
       <label>Кабинет</label>
       <input value={form.room} onChange={e => update("room", e.target.value)} />
 
+      {/* Новое поле для внутреннего номера */}
+      <label>Внутренний номер</label>
+      <input 
+        value={form.internal_phone || ""} 
+        onChange={e => update("internal_phone", e.target.value)} 
+        placeholder="Например: 102"
+      />
+
       <label>Городской</label>
       <input value={form.phone_city} onChange={e => update("phone_city", e.target.value)} />
 

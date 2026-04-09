@@ -1,3 +1,42 @@
+.rs-group {
+  margin-bottom: 8px;
+}
+
+.rs-group-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  padding-left: 22px;
+  border-radius: 8px;
+  font-size: 15px;
+  color: var(--fc-text-muted);
+  cursor: pointer;
+  transition: 0.15s ease;
+  user-select: none;
+}
+
+.rs-group-header:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--fc-text);
+}
+
+.rs-chevron {
+  margin-left: auto;
+  font-size: 18px;
+  line-height: 1;
+  transition: transform 0.2s ease;
+}
+
+.rs-subitem {
+  padding-left: 44px !important; /* дополнительный отступ для подуровня */
+}
+
+.rs-item-active {
+  background: var(--fc-accent);
+  color: #fff;
+}
+
 .rs-root {
   padding: 10px;
 }

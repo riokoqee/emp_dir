@@ -21,12 +21,15 @@ export default function ImportPreview({ onPrepared }) {
       const result = [];
 
       rows.forEach((row) => {
+        // Индексы колонок зависят от структуры твоего Excel-файла.
+        // Предположим, внутренний номер идет перед городским:
         const depName = row[1];
         const fullName = row[2];
-        const cityPhone = row[3];
-        const mobilePhone = row[4];
-        const email = row[5];
-        const room = row[6];
+        const internalPhone = row[3]; // Новая колонка
+        const cityPhone = row[4];     // Сдвинулось на 1
+        const mobilePhone = row[5];   // Сдвинулось на 1
+        const email = row[6];         // Сдвинулось на 1
+        const room = row[7];          // Сдвинулось на 1
 
         if (depName && !fullName) {
           currentDepartment = depName;
@@ -37,6 +40,7 @@ export default function ImportPreview({ onPrepared }) {
           result.push({
             name: fullName,
             department: currentDepartment,
+            internalPhone, // Добавляем в объект
             cityPhone,
             mobilePhone,
             email,
@@ -68,6 +72,7 @@ export default function ImportPreview({ onPrepared }) {
                 <tr>
                   <th>ФИО</th>
                   <th>Подразделение</th>
+                  <th>Внутр.</th> {/* Добавили заголовок */}
                   <th>Городской</th>
                   <th>Сотовый</th>
                   <th>Email</th>
@@ -80,6 +85,7 @@ export default function ImportPreview({ onPrepared }) {
                   <tr key={i}>
                     <td>{p.name}</td>
                     <td>{p.department}</td>
+                    <td className="text-blue-bold">{p.internalPhone || "-"}</td> {/* Вывод номера */}
                     <td>{p.cityPhone || "-"}</td>
                     <td>{p.mobilePhone || "-"}</td>
                     <td>{p.email || "-"}</td>
