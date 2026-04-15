@@ -18,6 +18,8 @@ CREATE TABLE IF NOT EXISTS employees (
 -- Очищаем всё перед заполнением
 TRUNCATE TABLE employees RESTART IDENTITY CASCADE;
 TRUNCATE TABLE departments RESTART IDENTITY CASCADE;
+DROP TABLE IF EXISTS employees CASCADE;
+DROP TABLE IF EXISTS departments CASCADE;
 
 -- ================================================
 -- 1. ДЕПАРТАМЕНТЫ (финальные названия)
@@ -284,6 +286,8 @@ INSERT INTO temp_cabinets (full_name, cabinet) VALUES
 ('Базылов Айбас', 'Пост'),
 ('Ибраев Женис Нуртаевич', 'Пост'),
 ('Столовая', 'Цоколь');
+
+ALTER TABLE employees ADD COLUMN birthday DATE;
 
 UPDATE employees e
 SET room = t.cabinet
